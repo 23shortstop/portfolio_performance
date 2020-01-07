@@ -25,3 +25,7 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
+
+config :portfolio_performance,
+  world_trading_url: "https://api.worldtradingdata.com/api/v1",
+  world_trading_token: System.get_env("WORLD_TRADING_TOKEN")
