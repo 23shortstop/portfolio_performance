@@ -24,8 +24,8 @@ defmodule PortfolioPerformance.WorldTrading.Client do
     |> process_response
   end
 
-  defp process_response({:ok, %{body: %{"history" => history}}}) do
-    {:ok, history}
+  defp process_response({:ok, %{body: %{"history" => _, "name" => _} = body}}) do
+    {:ok, body}
   end
 
   defp process_response({:ok, %{body: %{"Message" => error_message}}}) do

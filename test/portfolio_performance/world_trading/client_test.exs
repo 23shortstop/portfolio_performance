@@ -17,7 +17,7 @@ defmodule PortfolioPerformance.WorldTrading.ClientTest do
 
       Tesla.Mock.mock(fn
         %{url: ^url, method: :get, query: ^query} ->
-          %Tesla.Env{body: %{"history" => "some data"}}
+          %Tesla.Env{body: %{"history" => "some data", "name" => "QQQ"}}
 
         %{url: ^url, method: :get, query: wrong_query} ->
           raise "Query is incorrect: #{inspect(wrong_query)}"
