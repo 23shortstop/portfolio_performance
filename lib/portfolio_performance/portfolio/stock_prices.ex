@@ -10,15 +10,10 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
 
   @spec monthly_multi_full_history(list(String.t()), Date.t()) :: result
   def monthly_multi_full_history(tickers, date_from) do
-    options = [
-      date_from: Date.to_string(date_from),
-      date_to: Date.to_string(Timex.today())
-    ]
-
     try do
       prices =
         tickers
-        |> Enum.map(&full_history(&1, options))
+        |> Enum.map(&full_history(&1, date_from: Date.to_string(date_from)))
         |> Enum.map(&filter_monthly/1)
         |> Enum.zip()
         |> Enum.flat_map(&group_by_date/1)
@@ -32,13 +27,13 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
   end
 
   defp full_history(ticker, options) do
-    with {:ok, response} <- WorldTrading.Client.full_history(ticker, options) do
-      history =
-        response
-        |> Enum.map(fn {date, %{@price_key => price}} ->
-          {to_date(date), %{ticker => to_cents(price)}}
-        end)
-        |> Enum.into(%{})
+    with {:ok, %{"history" => history, "name" => name}} <-
+           WorldTrading.Client.full_history(ticker, options) do
+      history
+      |> Enum.map(fn {date, %{@price_key => price}} ->
+        {to_date(date), %{name => to_cents(price)}}
+      end)
+      |> Enum.into(%{})
     else
       api_error -> throw(api_error)
     end
