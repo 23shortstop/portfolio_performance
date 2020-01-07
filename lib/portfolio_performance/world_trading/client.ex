@@ -13,10 +13,12 @@ defmodule PortfolioPerformance.WorldTrading.Client do
 
   @token Application.fetch_env!(:portfolio_performance, :world_trading_token)
   @base_url Application.fetch_env!(:portfolio_performance, :world_trading_url)
+  @timeout Application.fetch_env!(:portfolio_performance, :world_trading_timeout)
 
   plug Tesla.Middleware.BaseUrl, @base_url
   plug Tesla.Middleware.Query, api_token: @token
   plug Tesla.Middleware.DecodeJson
+  plug Tesla.Middleware.Timeout, timeout: @timeout
 
   @spec full_history(String.t(), history_options) :: result
   def full_history(symbol, options \\ []) do

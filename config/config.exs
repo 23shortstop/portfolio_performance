@@ -27,4 +27,5 @@ config :phoenix, :json_library, Jason
 import_config "#{Mix.env()}.exs"
 
 config :portfolio_performance,
-  world_trading_url: "https://api.worldtradingdata.com/api/v1"
+  world_trading_url: "https://api.worldtradingdata.com/api/v1",
+  world_trading_timeout: 5_000
