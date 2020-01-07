@@ -10,3 +10,5 @@ config :portfolio_performance, PortfolioPerformanceWeb.Endpoint,
 config :logger, level: :warn
 
 config :portfolio_performance, world_trading_token: "test_token"
+
+config :tesla, adapter: Tesla.Mock
