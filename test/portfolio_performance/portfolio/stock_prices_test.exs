@@ -64,6 +64,13 @@ defmodule PortfolioPerformance.Portfolio.StockPricesTest do
         end)
       end)
     end
+
+    test "sorts history by dates" do
+      {:ok, multi_history} = StockPrices.monthly_multi_full_history(@tickers, @date_from)
+
+      keys = multi_history |> Keyword.keys()
+      assert keys == keys |> Enum.sort_by(&Date.to_erl/1)
+    end
   end
 
   describe "error responce from World Trading" do
