@@ -19,7 +19,7 @@ defmodule PortfolioPerformance.WorldTrading.Client do
   plug Tesla.Middleware.DecodeJson
 
   @spec full_history(String.t(), history_options) :: result
-  def full_history(symbol, options \\ []) do
+  def full_history(symbol, options) do
     get("history", query: [{:symbol, symbol} | options])
     |> process_response
   end

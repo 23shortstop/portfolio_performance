@@ -14,10 +14,10 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
     try do
       prices =
         tickers
-        |> Enum.map(&full_history(&1, date_from: Date.to_string(date_from)))
-        |> Enum.map(&filter_monthly/1)
-        |> Enum.zip()
-        |> Enum.flat_map(&group_by_date/1)
+        |> Enum.flat_map(&full_history(&1, date_from: Date.to_string(date_from)))
+        |> group_by_date
+        |> filter_monthly
+        |> Enum.filter(fn {_, stocks} -> Enum.count(stocks) == length(tickers) end)
         |> Enum.sort_by(fn {date, _prices} -> Date.to_erl(date) end)
 
       {:ok, prices}
@@ -68,7 +68,6 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
 
   defp group_by_date(stocks_price) do
     stocks_price
-    |> Tuple.to_list()
     |> Enum.group_by(fn {date, _} -> date end, fn {_, prices} -> prices end)
     |> Enum.flat_map(fn {date, prices} -> %{date => Enum.reduce(prices, &Map.merge/2)} end)
   end
