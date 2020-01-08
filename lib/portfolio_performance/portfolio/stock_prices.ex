@@ -6,10 +6,10 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
   @price_key "close"
 
   @type stock_prices :: %{String.t() => integer()}
-  @type multi_history :: %{Date.t() => stock_prices}
-  @type result :: {:ok, multi_history} | {:error, String.t()}
+  @type multi_history :: [{Date.t(), stock_prices()}]
+  @type result :: {:ok, multi_history()} | {:error, String.t()}
 
-  @spec monthly_multi_full_history(list(String.t()), Date.t()) :: result
+  @spec monthly_multi_full_history(list(String.t()), Date.t()) :: result()
   def monthly_multi_full_history(tickers, date_from) do
     try do
       prices =
@@ -18,6 +18,7 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
         |> Enum.map(&filter_monthly/1)
         |> Enum.zip()
         |> Enum.flat_map(&group_by_date/1)
+        |> Enum.sort_by(fn {date, _prices} -> Date.to_erl(date) end)
 
       {:ok, prices}
     catch
