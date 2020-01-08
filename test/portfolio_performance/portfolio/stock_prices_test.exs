@@ -60,7 +60,7 @@ defmodule PortfolioPerformance.Portfolio.StockPricesTest do
       |> Enum.each(fn {_date, data} ->
         data
         |> Enum.each(fn {_, price} ->
-          assert price === String.to_float(@data_sample["close"]) * 100 |> trunc
+          assert price === (String.to_float(@data_sample["close"]) * 100) |> trunc
         end)
       end)
     end
