@@ -5,7 +5,8 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
   @date_format "{YYYY}-{0M}-{0D}"
   @price_key "close"
 
-  @type multi_history :: %{Date.t() => %{String.t() => integer()}}
+  @type stock_prices :: %{String.t() => integer()}
+  @type multi_history :: %{Date.t() => stock_prices}
   @type result :: {:ok, multi_history} | {:error, String.t()}
 
   @spec monthly_multi_full_history(list(String.t()), Date.t()) :: result
