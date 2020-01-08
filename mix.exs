@@ -41,7 +41,8 @@ defmodule PortfolioPerformance.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:tesla, "~> 1.3"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
-      {:timex, "~> 3.5"}
+      {:timex, "~> 3.5"},
+      {:phoenix_live_view, "~> 0.4"}
     ]
   end
 end
