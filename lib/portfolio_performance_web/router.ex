@@ -18,7 +18,7 @@ defmodule PortfolioPerformanceWeb.Router do
   scope "/", PortfolioPerformanceWeb do
     pipe_through :browser
 
-    live "/", PageController
+    live "/", PerformanceLive
   end
 
   # Other scopes may use custom stacks.
