@@ -1,8 +1,7 @@
 defmodule PortfolioPerformance.Performance do
-  alias PortfolioPerformance.Portfolio.StockPrices
-  alias PortfolioPerformance.Portfolio
+  alias PortfolioPerformance.{Portfolio.StockPrices, Portfolio}
 
-  @type options :: [rebalancing: :monthly | :yearly]
+  @type options :: [rebalancing: String.t()]
   @type performance :: %{Date.t() => Portfolio.t()}
   @type result :: {:ok, performance()} | {:error, String.t()}
 
@@ -38,8 +37,8 @@ defmodule PortfolioPerformance.Performance do
 
   defp rebalance?(current_date, previous_date, options) do
     case Keyword.get(options, :rebalancing) do
-      :monthly -> current_date.month != previous_date.month
-      :yearly -> current_date.year != previous_date.year
+      "monthly" -> current_date.month != previous_date.month
+      "yearly" -> current_date.year != previous_date.year
       _ -> false
     end
   end

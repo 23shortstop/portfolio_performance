@@ -1,8 +1,7 @@
 defmodule PortfolioPerformance.Portfolio.StockPrices do
-  alias PortfolioPerformance.WorldTrading
+  alias PortfolioPerformance.{WorldTrading, TimexHelper}
   require Logger
 
-  @date_format "{YYYY}-{0M}-{0D}"
   @price_key "close"
 
   @type stock_prices :: %{String.t() => integer()}
@@ -33,18 +32,12 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
            WorldTrading.Client.full_history(ticker, options) do
       history
       |> Enum.map(fn {date, %{@price_key => price}} ->
-        {to_date(date), %{name => to_cents(price)}}
+        {TimexHelper.to_date(date), %{name => to_cents(price)}}
       end)
       |> Enum.into(%{})
     else
       api_error -> throw(api_error)
     end
-  end
-
-  defp to_date(string_date) do
-    string_date
-    |> Timex.parse!(@date_format)
-    |> NaiveDateTime.to_date()
   end
 
   defp to_cents(string_dollar_price) do
