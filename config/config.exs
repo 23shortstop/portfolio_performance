@@ -12,7 +12,8 @@ config :portfolio_performance, PortfolioPerformanceWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "HwbnQg53s7Cz9UWu4IH14NZXw1KdBKyXAAtOUEHen2QZQrilpxCgBxCv+75g3iRz",
   render_errors: [view: PortfolioPerformanceWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: PortfolioPerformance.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: PortfolioPerformance.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "J92s9u5lJiRsJjMJRdpIyIhP4+ZuMlA6"]
 
 # Configures Elixir's Logger
 config :logger, :console,
