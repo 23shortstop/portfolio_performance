@@ -2,7 +2,7 @@
 <div class="alert alert-danger" role="alert"><%= @notifications[:error] %></div>
 <div class="container">
   <div class="row">
-    <div class="col-4">
+    <div class="col-4 mt-3">
       <form phx-submit="build">
         <div class="form-group row mb-1">
           <div class="input-group">
@@ -10,7 +10,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
             </div>
-            <input type="text" class="form-control col-sm-8" name="balance" value="<%= @input_params["balance"] %>" required>
+            <input type="number" class="form-control col-sm-8" name="balance" value="<%= @input_params["balance"] %>" required>
             <div class="input-group-append">
               <span class="input-group-text">.00</span>
             </div>
@@ -64,6 +64,8 @@
         <button type="submit" class="btn btn-primary float-right">Build</button>
       </form>
     </div>
-    <div class="col-8"><%= inspect(@performance) %></div>
+    <div class="col-8">
+      <canvas id="portfolioChart" data-chart="<%= Jason.encode!(@performance) %>" phx-hook="BuildChart" style="display: block;" width="1520" height="900"></canvas>
+    </div>
   </div>
 </div>
