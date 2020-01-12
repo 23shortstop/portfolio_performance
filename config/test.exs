@@ -7,4 +7,8 @@ config :portfolio_performance, PortfolioPerformanceWeb.Endpoint,
   server: false
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :error
+
+config :portfolio_performance, world_trading_token: "test_token"
+
+config :tesla, adapter: Tesla.Mock
