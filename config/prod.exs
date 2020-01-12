@@ -10,7 +10,8 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :portfolio_performance, PortfolioPerformanceWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  url: [scheme: "https", host: "portfolio-performance.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
@@ -52,7 +53,7 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
 
 config :portfolio_performance,
   world_trading_token: System.get_env("WORLD_TRADING_TOKEN")
