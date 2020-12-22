@@ -4,7 +4,7 @@ defmodule PortfolioPerformanceWeb.PerformanceLive do
   alias Phoenix.LiveView.Socket
   require Logger
 
-  def mount(_options, socket) do
+  def mount(_options, _session, socket) do
     {:ok,
      socket
      |> assign(
