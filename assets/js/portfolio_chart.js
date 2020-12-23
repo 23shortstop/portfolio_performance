@@ -36,7 +36,7 @@ export let BuildChartHook = {
     });
   },
 
-  mount() {
+  mounted() {
     this.chart = this.buildChart();
   },
 

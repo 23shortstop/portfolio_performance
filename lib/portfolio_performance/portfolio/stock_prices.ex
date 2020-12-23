@@ -1,6 +1,5 @@
 defmodule PortfolioPerformance.Portfolio.StockPrices do
-  alias PortfolioPerformance.{WorldTrading, TimexHelper}
-  require Logger
+  alias PortfolioPerformance.{Marketstack, TimexHelper}
 
   @price_key "close"
 
@@ -21,28 +20,24 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
 
       {:ok, prices}
     catch
-      {:error, msg} ->
-        Logger.warn("Full history request failed with error: #{msg}")
-        {:error, "Unable to receive stock prices"}
+      {:error, message} -> {:error, "Unable to receive stock prices: #{message}"}
     end
   end
 
   defp full_history(ticker, options) do
-    with {:ok, %{"history" => history, "name" => name}} <-
-           WorldTrading.Client.full_history(ticker, options) do
+    with {:ok, history} <- Marketstack.Client.full_history(ticker, options) do
       history
-      |> Enum.map(fn {date, %{@price_key => price}} ->
-        {TimexHelper.to_date(date), %{name => to_cents(price)}}
+      |> Enum.map(fn %{"date" => date, "symbol" => symbol, @price_key => price} ->
+        {TimexHelper.to_date(date), %{symbol => to_cents(price)}}
       end)
       |> Enum.into(%{})
     else
-      api_error -> throw(api_error)
+      {:error, message} -> throw({:error, message})
     end
   end
 
-  defp to_cents(string_dollar_price) do
-    string_dollar_price
-    |> String.to_float()
+  defp to_cents(float_dollar_price) do
+    float_dollar_price
     |> (&(&1 * 100)).()
     |> trunc
   end

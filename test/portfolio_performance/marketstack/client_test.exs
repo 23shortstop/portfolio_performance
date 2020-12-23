@@ -1,10 +1,10 @@
-defmodule PortfolioPerformance.WorldTrading.ClientTest do
+defmodule PortfolioPerformance.Marketstack.ClientTest do
   use ExUnit.Case
-  import PortfolioPerformance.WorldTrading.TestHelper
-  alias PortfolioPerformance.WorldTrading.Client
+  import PortfolioPerformance.Marketstack.TestHelper
+  alias PortfolioPerformance.Marketstack.Client
 
-  @test_token Application.fetch_env!(:portfolio_performance, :world_trading_token)
-  @test_base_url Application.fetch_env!(:portfolio_performance, :world_trading_url)
+  @access_key Application.fetch_env!(:portfolio_performance, :marketstack_access_key)
+  @test_base_url Application.fetch_env!(:portfolio_performance, :marketstack_url)
 
   @symbol "TWTR"
   @date_from "2019-12-30"
@@ -12,7 +12,7 @@ defmodule PortfolioPerformance.WorldTrading.ClientTest do
 
   describe "full_history" do
     setup do
-      query = [{:symbol, @symbol}] ++ @options ++ [{:api_token, @test_token}]
+      query = [{:symbol, @symbol}] ++ @options ++ [{:api_token, @access_key}]
       url = @test_base_url <> "/history"
 
       Tesla.Mock.mock(fn

@@ -17,11 +17,11 @@ https://portfolio-performance.herokuapp.com
 
 ## To start the app locally:
 
-The [World Trading Data API](https://www.worldtradingdata.com/) is using to obtain historical trading data for stocks.
-You need to [register](https://www.worldtradingdata.com/register) and get your own API token.
+The [Marketstack API](https://marketstack.com/) is using to obtain historical trading data for stocks.
+You need to [register](https://marketstack.com/product) and get your own API token.
 
   * Install dependencies with `mix deps.get`
   * Install Node.js dependencies with `npm install --prefix assets`
-  * Start Phoenix endpoint with `WORLD_TRADING_TOKEN=your_api_token mix phx.server`
+  * Start Phoenix endpoint with `MARKETSTACK_ACCESS_KEY=your_access_key mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.

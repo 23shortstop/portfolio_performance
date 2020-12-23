@@ -1,4 +1,4 @@
-defmodule PortfolioPerformance.WorldTrading.TestHelper do
+defmodule PortfolioPerformance.Marketstack.TestHelper do
   def world_trade_success_mock(_) do
     mock_body =
       File.read!("test/support/world_trading/fixtures/full_history/success.json")

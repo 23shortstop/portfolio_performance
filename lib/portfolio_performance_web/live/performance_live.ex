@@ -53,7 +53,7 @@ defmodule PortfolioPerformanceWeb.PerformanceLive do
     try do
       parsed_params = %{
         balance: String.to_integer(balance) * 100,
-        date_from: TimexHelper.to_date(start_date),
+        date_from: TimexHelper.to_date(start_date, "{YYYY}-{0M}-{D}"),
         allocation: parse_allocation(allocation),
         options: [rebalancing: rebalancing]
       }

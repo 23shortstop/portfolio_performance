@@ -1,7 +1,7 @@
 defmodule PortfolioPerformance.PerformanceTest do
   use ExUnit.Case
   alias PortfolioPerformance.Performance
-  import PortfolioPerformance.WorldTrading.TestHelper
+  import PortfolioPerformance.Marketstack.TestHelper
 
   @balance 10_000_001
   @date_from Timex.today() |> Timex.shift(years: -3)

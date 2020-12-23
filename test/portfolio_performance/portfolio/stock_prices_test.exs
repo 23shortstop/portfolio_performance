@@ -1,7 +1,7 @@
 defmodule PortfolioPerformance.Portfolio.StockPricesTest do
   use ExUnit.Case
   alias PortfolioPerformance.Portfolio.StockPrices
-  import PortfolioPerformance.WorldTrading.TestHelper
+  import PortfolioPerformance.Marketstack.TestHelper
 
   @date_from Timex.to_date({2019, 9, 15})
   @start_of_next_month @date_from |> Timex.end_of_month() |> Timex.shift(days: 1)
