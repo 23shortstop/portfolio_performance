@@ -3,32 +3,24 @@ defmodule PortfolioPerformance.Portfolio.StockPricesTest do
   alias PortfolioPerformance.Portfolio.StockPrices
   import PortfolioPerformance.Marketstack.TestHelper
 
-  @date_from Timex.to_date({2019, 9, 15})
+  @date_from Timex.to_datetime({2019, 9, 15})
   @start_of_next_month @date_from |> Timex.end_of_month() |> Timex.shift(days: 1)
   @midle_of_next_month @start_of_next_month |> Timex.shift(days: 15)
   @date_to @start_of_next_month |> Timex.end_of_month()
 
   @all_dates [@date_from, @start_of_next_month, @midle_of_next_month, @date_to]
 
-  @data_sample %{
-    "open" => "16.62",
-    "close" => "16.78",
-    "high" => "16.95",
-    "low" => "16.46",
-    "volume" => "26030811"
-  }
+  @data_sample %{"close" => 309.76, "symbol" => "QQQ"}
 
   @history_sample @all_dates
-                  |> Enum.map(fn date -> {date |> Date.to_string(), @data_sample} end)
-                  |> Enum.into(%{})
+                  |> Enum.map(&Map.put(@data_sample, "date", DateTime.to_string(&1)))
 
   @tickers ["TWTR", "SNAP"]
 
   describe "success monthly_multi_full_history" do
     setup do
-      Tesla.Mock.mock(fn
-        %{query: [{:symbol, symbol} | _]} ->
-          %Tesla.Env{body: %{"name" => symbol, "history" => @history_sample}}
+      Tesla.Mock.mock(fn %{query: [{:symbols, _symbol} | _]} ->
+        %Tesla.Env{status: 200, body: %{"data" => @history_sample}}
       end)
 
       :ok
@@ -38,10 +30,10 @@ defmodule PortfolioPerformance.Portfolio.StockPricesTest do
       {:ok, multi_history} = StockPrices.monthly_multi_full_history(@tickers, @date_from)
 
       result_dates = multi_history |> Keyword.keys()
-      assert result_dates |> Enum.member?(@date_from)
-      assert result_dates |> Enum.member?(@start_of_next_month)
-      assert result_dates |> Enum.member?(@date_to)
-      refute result_dates |> Enum.member?(@midle_of_next_month)
+      assert result_dates |> Enum.member?(DateTime.to_date(@date_from))
+      assert result_dates |> Enum.member?(DateTime.to_date(@start_of_next_month))
+      assert result_dates |> Enum.member?(DateTime.to_date(@date_to))
+      refute result_dates |> Enum.member?(DateTime.to_date(@midle_of_next_month))
     end
 
     test "merges histories for many stocks" do
@@ -60,7 +52,7 @@ defmodule PortfolioPerformance.Portfolio.StockPricesTest do
       |> Enum.each(fn {_date, data} ->
         data
         |> Enum.each(fn {_, price} ->
-          assert price === (String.to_float(@data_sample["close"]) * 100) |> trunc
+          assert price === (@data_sample["close"] * 100) |> trunc
         end)
       end)
     end
@@ -73,8 +65,8 @@ defmodule PortfolioPerformance.Portfolio.StockPricesTest do
     end
   end
 
-  describe "error responce from World Trading" do
-    setup [:world_trade_error_mock]
+  describe "error responce from Marketstack" do
+    setup [:marketstack_error_mock]
 
     test "returns error tuple" do
       {:error, _} = StockPrices.monthly_multi_full_history(@tickers, @date_from)

@@ -22,7 +22,7 @@ defmodule PortfolioPerformance.Marketstack.Client do
   @max_limit 1000
   @spec full_history(String.t(), history_options) :: result
   def full_history(symbol, options) do
-    get("eod", query: [limit: @max_limit, symbols: symbol] ++ options)
+    get("eod", query: [symbols: symbol, limit: @max_limit] ++ options)
     |> process_response
   end
 

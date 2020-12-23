@@ -27,8 +27,8 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
   defp full_history(ticker, options) do
     with {:ok, history} <- Marketstack.Client.full_history(ticker, options) do
       history
-      |> Enum.map(fn %{"date" => date, "symbol" => symbol, @price_key => price} ->
-        {TimexHelper.to_date(date), %{symbol => to_cents(price)}}
+      |> Enum.map(fn %{"date" => date, @price_key => price} ->
+        {TimexHelper.to_date(date), %{ticker => to_cents(price)}}
       end)
       |> Enum.into(%{})
     else

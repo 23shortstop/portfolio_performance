@@ -7,7 +7,7 @@ defmodule PortfolioPerformance.PerformanceTest do
   @date_from Timex.today() |> Timex.shift(years: -3)
 
   describe "success" do
-    setup [:world_trade_success_mock]
+    setup [:marketstack_success_mock]
 
     test "build", %{mock: body} do
       ticker = body["name"]
@@ -17,7 +17,7 @@ defmodule PortfolioPerformance.PerformanceTest do
   end
 
   describe "error" do
-    setup [:world_trade_error_mock]
+    setup [:marketstack_error_mock]
 
     test "build", %{mock: _body} do
       allocation = %{"TWTR" => 70, "SNAP" => 30}
