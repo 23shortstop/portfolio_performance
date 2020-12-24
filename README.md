@@ -2,15 +2,18 @@
 
 ## Description
 
-- A web application where you can enter the state of your assets portfolio at some day in the past and see how much money would be worth today.
+- A web application where you can enter the state of your assets portfolio someday in the past and see how much money it would worth today.
 
-#### Example: 
-- Start Date: 2013-03-20
+#### Example:
 - Initial Balance: $32500
-- Portfolio Allocation:
-  - AAPL: 20%
-  - GOOG: 50%
-  - VTI: 30%
+- Start Date: 2017-03-20
+- Rebalancing: Yearly
+- Assets Allocation:
+  - TWTR: 30%
+  - GOOG: 60%
+  - AAPL: 10%
+
+![Screenshot](assets/static/images/screenshot.png?raw=true)
 
 ## Live staging is available here:
 https://portfolio-performance.herokuapp.com
