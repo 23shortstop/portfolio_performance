@@ -27,30 +27,25 @@ defmodule PortfolioPerformance.Portfolio.StockPrices do
   defp full_history(ticker, options) do
     with {:ok, history} <- Marketstack.Client.full_history(ticker, options) do
       history
-      |> Enum.map(fn %{"date" => date, @price_key => price} ->
+      |> Enum.into(%{}, fn %{"date" => date, @price_key => price} ->
         {TimexHelper.to_date(date), %{ticker => to_cents(price)}}
       end)
-      |> Enum.into(%{})
     else
       {:error, message} -> throw({:error, message})
     end
   end
 
-  defp to_cents(float_dollar_price) do
-    float_dollar_price
-    |> (&(&1 * 100)).()
-    |> trunc
-  end
+  defp to_cents(float_dollar_price), do: trunc(float_dollar_price * 100)
 
   defp filter_monthly(history) do
     {last_date, last_value} = Enum.max_by(history, fn {date, _} -> Date.to_erl(date) end)
 
     history
     |> Enum.group_by(fn {date, _} -> {date.year, date.month} end)
-    |> Enum.map(fn {_, data} ->
-      data |> Enum.min_by(fn {date, _} -> Date.to_erl(date) end)
+    |> Enum.into(%{}, fn {_, data} ->
+      data
+      |> Enum.min_by(fn {date, _} -> Date.to_erl(date) end)
     end)
-    |> Enum.into(%{})
     |> Map.put(last_date, last_value)
   end
 
