@@ -7,10 +7,9 @@ defmodule PortfolioPerformance.Performance do
 
   @spec build(integer(), Portfolio.allocation(), Date.t(), options()) :: result()
   def build(balance, allocation, date_from, options \\ []) do
-    with {:ok, stocks_history} <-
-           allocation
-           |> Map.keys()
-           |> StockPrices.monthly_multi_full_history(date_from) do
+    tickers = Map.keys(allocation)
+
+    with {:ok, stocks_history} <- StockPrices.monthly_multi_full_history(tickers, date_from) do
       {:ok, build_with_price_history(balance, allocation, stocks_history, options)}
     end
   end

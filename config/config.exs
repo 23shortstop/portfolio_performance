@@ -28,4 +28,5 @@ config :phoenix, :json_library, Jason
 import_config "#{Mix.env()}.exs"
 
 config :portfolio_performance,
-  world_trading_url: "https://api.worldtradingdata.com/api/v1"
+  marketstack_url: "https://api.marketstack.com/v1/",
+  marketstack_access_key: System.get_env("MARKETSTACK_ACCESS_KEY")

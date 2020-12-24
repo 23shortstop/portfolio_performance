@@ -1,10 +1,10 @@
-defmodule PortfolioPerformance.WorldTrading.ClientTest do
+defmodule PortfolioPerformance.Marketstack.ClientTest do
   use ExUnit.Case
-  import PortfolioPerformance.WorldTrading.TestHelper
-  alias PortfolioPerformance.WorldTrading.Client
+  import PortfolioPerformance.Marketstack.TestHelper
+  alias PortfolioPerformance.Marketstack.Client
 
-  @test_token Application.fetch_env!(:portfolio_performance, :world_trading_token)
-  @test_base_url Application.fetch_env!(:portfolio_performance, :world_trading_url)
+  @access_key Application.fetch_env!(:portfolio_performance, :marketstack_access_key)
+  @test_base_url Application.fetch_env!(:portfolio_performance, :marketstack_url)
 
   @symbol "TWTR"
   @date_from "2019-12-30"
@@ -12,12 +12,12 @@ defmodule PortfolioPerformance.WorldTrading.ClientTest do
 
   describe "full_history" do
     setup do
-      query = [{:symbol, @symbol}] ++ @options ++ [{:api_token, @test_token}]
-      url = @test_base_url <> "/history"
+      query = [symbols: @symbol, limit: 1000] ++ @options ++ [access_key: @access_key]
+      url = @test_base_url <> "eod"
 
       Tesla.Mock.mock(fn
         %{url: ^url, method: :get, query: ^query} ->
-          %Tesla.Env{body: %{"history" => "some data", "name" => "QQQ"}}
+          %Tesla.Env{status: 200, body: %{"data" => ["some data"]}}
 
         %{url: ^url, method: :get, query: wrong_query} ->
           raise "Query is incorrect: #{inspect(wrong_query)}"
@@ -38,11 +38,11 @@ defmodule PortfolioPerformance.WorldTrading.ClientTest do
   end
 
   describe "error response" do
-    setup [:world_trade_error_mock]
+    setup [:marketstack_error_mock]
 
     test "process", %{mock: body} do
       assert {:error, error_msg} = Client.full_history(@symbol, @options)
-      assert error_msg == (body["message"] || body["Message"])
+      assert error_msg == body["error"]["message"]
     end
   end
 

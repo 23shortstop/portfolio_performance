@@ -4,7 +4,7 @@ defmodule PortfolioPerformanceWeb.PerformanceLive do
   alias Phoenix.LiveView.Socket
   require Logger
 
-  def mount(_options, socket) do
+  def mount(_options, _session, socket) do
     {:ok,
      socket
      |> assign(
@@ -53,7 +53,7 @@ defmodule PortfolioPerformanceWeb.PerformanceLive do
     try do
       parsed_params = %{
         balance: String.to_integer(balance) * 100,
-        date_from: TimexHelper.to_date(start_date),
+        date_from: TimexHelper.to_date(start_date, "{YYYY}-{0M}-{D}"),
         allocation: parse_allocation(allocation),
         options: [rebalancing: rebalancing]
       }
@@ -71,10 +71,9 @@ defmodule PortfolioPerformanceWeb.PerformanceLive do
     |> Enum.reject(fn
       {_, %{"ticker" => ticker, "value" => value}} -> ticker == "" || value == ""
     end)
-    |> Enum.map(fn
-      {_, %{"ticker" => ticker, "value" => value}} -> {ticker, String.to_integer(value)}
+    |> Enum.into(%{}, fn {_, %{"ticker" => ticker, "value" => value}} ->
+      {ticker, String.to_integer(value)}
     end)
-    |> Enum.into(%{})
   end
 
   defp validate_params(%Socket{assigns: %{parsed_params: %{allocation: allocation}}} = socket) do
@@ -87,19 +86,8 @@ defmodule PortfolioPerformanceWeb.PerformanceLive do
     end
   end
 
-  defp build_performance(
-         %Socket{
-           assigns: %{
-             parsed_params: %{
-               balance: balance,
-               date_from: date_from,
-               allocation: allocation,
-               options: options
-             }
-           }
-         } = socket
-       ) do
-    case Performance.build(balance, allocation, date_from, options) do
+  defp build_performance(%Socket{assigns: %{parsed_params: params}} = socket) do
+    case Performance.build(params.balance, params.allocation, params.date_from, params.options) do
       {:ok, performance} -> assign(socket, performance: performance)
       {:error, msg} -> assign(socket, notifications: %{warning: msg})
     end

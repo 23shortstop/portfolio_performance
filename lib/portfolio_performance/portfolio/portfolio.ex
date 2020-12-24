@@ -22,16 +22,17 @@ defmodule PortfolioPerformance.Portfolio do
       |> Enum.to_list()
       |> Enum.sort(fn {_, price1}, {_, price2} -> price1 > price2 end)
       |> Enum.with_index()
-      |> Enum.map_reduce(balance, fn
-        {{ticker, price}, index}, unused_balance ->
-          max_stock_balance =
-            if index == last_index,
-              do: unused_balance,
-              else: (balance * Map.get(allocation, ticker)) |> div(100)
+      |> Enum.map_reduce(balance, fn {{ticker, price}, index}, unused_balance ->
+        max_stock_balance =
+          if index == last_index do
+            unused_balance
+          else
+            (balance * Map.get(allocation, ticker)) |> div(100)
+          end
 
-          stock_amount = div(max_stock_balance, price)
-          actual_stock_balance = stock_amount * price
-          {{ticker, %{amount: stock_amount, price: price}}, unused_balance - actual_stock_balance}
+        stock_amount = div(max_stock_balance, price)
+        actual_stock_balance = stock_amount * price
+        {{ticker, %{amount: stock_amount, price: price}}, unused_balance - actual_stock_balance}
       end)
 
     %__MODULE__{
@@ -45,12 +46,11 @@ defmodule PortfolioPerformance.Portfolio do
   def calculate_balance(portfolio, new_prices) do
     {new_assets, balance} =
       portfolio.assets
-      |> Enum.map_reduce(portfolio.unused_balance, fn
-        {ticker, %{amount: amount}}, acc ->
-          new_price = Map.get(new_prices, ticker)
-          new_asset = {ticker, %{amount: amount, price: new_price}}
-          new_balance = new_price * amount + acc
-          {new_asset, new_balance}
+      |> Enum.map_reduce(portfolio.unused_balance, fn {ticker, %{amount: amount}}, acc ->
+        new_price = Map.get(new_prices, ticker)
+        new_asset = {ticker, %{amount: amount, price: new_price}}
+        new_balance = new_price * amount + acc
+        {new_asset, new_balance}
       end)
 
     %__MODULE__{

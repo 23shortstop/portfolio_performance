@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+     "adj_close": 309.76,
+     "adj_high": 310.7105,
+     "adj_low": 306.845,
+     "adj_open": 309.85,
+     "adj_volume": 26378343.0,
+     "close": 309.76,
+     "date": "2020-12-22T00:00:00+0000",
+     "exchange": "XNAS",
+     "high": 310.7105,
+     "low": 306.845,
+     "open": 309.85,
+     "symbol": "QQQ",
+     "volume": 26378343.0
+    },
+    {
+     "adj_close": 308.92,
+     "adj_high": 309.47,
+     "adj_low": 303.6,
+     "adj_open": 306.46,
+     "adj_volume": 37095480.0,
+     "close": 308.92,
+     "date": "2020-12-21T00:00:00+0000",
+     "exchange": "XNAS",
+     "high": 309.47,
+     "low": 303.6,
+     "open": 306.46,
+     "symbol": "QQQ",
+     "volume": 37095480.0
+    }
+  ],
+  "pagination": {
+    "count": 2,
+    "limit": 1000,
+    "offset": 0,
+    "total": 2
+  }
+}
